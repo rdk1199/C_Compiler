@@ -1,0 +1,58 @@
+first(EPSILON): {EPSILON }
+first(EOF): { EOF, }
+first((): { (, }
+first()): { ), }
+first(GOAL): { (, }
+first(LIST): { (, }
+first(PAIR): { (, }
+
+CC[0] : GOAL ->  | LIST ; lookahead: EOF //= book CC[0]
+ LIST ->  | LIST PAIR ; lookahead: EOF
+ LIST ->  | LIST PAIR ; lookahead: (
+ LIST ->  | PAIR ; lookahead: EOF
+ LIST ->  | PAIR ; lookahead: (
+ PAIR ->  | ( ) ; lookahead: EOF
+ PAIR ->  | ( ) ; lookahead: (
+ PAIR ->  | ( PAIR ) ; lookahead: EOF
+ PAIR ->  | ( PAIR ) ; lookahead: (
+
+CC[1] : GOAL -> LIST  | ; lookahead: EOF //= book CC[1]
+ LIST -> LIST  | PAIR ; lookahead: EOF
+ LIST -> LIST  | PAIR ; lookahead: (
+ PAIR ->  | ( ) ; lookahead: EOF
+ PAIR ->  | ( ) ; lookahead: (
+ PAIR ->  | ( PAIR ) ; lookahead: EOF
+ PAIR ->  | ( PAIR ) ; lookahead: (
+
+CC[2] : LIST -> PAIR  | ; lookahead: EOF //= book CC[2]
+ LIST -> PAIR  | ; lookahead: (
+
+CC[3] : PAIR ->  | ( ) ; lookahead: ) // = book CC[3]
+ PAIR -> (  | ) ; lookahead: EOF
+ PAIR -> (  | ) ; lookahead: (
+ PAIR ->  | ( PAIR ) ; lookahead: )
+ PAIR -> (  | PAIR ) ; lookahead: EOF
+ PAIR -> (  | PAIR ) ; lookahead: (
+
+CC[4] : LIST -> LIST PAIR  | ; lookahead: EOF // = book CC[4]
+ LIST -> LIST PAIR  | ; lookahead: (
+
+CC[5] : PAIR ->  | ( ) ; lookahead: ) // = book CC[6]
+ PAIR -> (  | ) ; lookahead: )
+ PAIR ->  | ( PAIR ) ; lookahead: )
+ PAIR -> (  | PAIR ) ; lookahead: )
+
+CC[6] : PAIR -> ( )  | ; lookahead: EOF // = book CC[7]
+ PAIR -> ( )  | ; lookahead: (
+
+CC[7] : PAIR -> ( PAIR  | ) ; lookahead: EOF // = book CC[5]
+ PAIR -> ( PAIR  | ) ; lookahead: (
+
+CC[8] : PAIR -> ( )  | ; lookahead: ) // = book CC[10]
+
+CC[9] : PAIR -> ( PAIR  | ) ; lookahead: ) //=book CC[9]
+
+CC[10] : PAIR -> ( PAIR )  | ; lookahead: EOF // = book CC[8]
+ PAIR -> ( PAIR )  | ; lookahead: (
+
+CC[11] : PAIR -> ( PAIR )  | ; lookahead: ) // = book CC[11]
